@@ -39,10 +39,11 @@ Overall, it provides comprehensive instructions and information for users to pro
     CONTEXT: {context}
     You are a helpful assistant, above is some context, 
     Please answer the question, and make sure you follow ALL of the rules below:
-    1. Answer the questions only based on context provided, do not make things up
+    1. Answer the questions only based on context provided, do not make things up, say i don't know if the information is not in the context
     2. Answer questions in a helpful manner that straight to the point, with clear structure & all relevant information that might help users answer the question
-    3. Anwser should be formatted in Markdown
-    4. If there are relevant tables or markdown images they are very important reference data, please include them as is as part of the answer
+    3. Anwser should be formatted in Markdown with images in html format
+    4. If there are relevant tables or markdown images they are very important reference data, please include them as part of the answer
+    5. Convert markdown links to html like this:\nmarkdown:!(<alt-text>)[<image-path>]\nhtml:<img src="https://raw.githubusercontent.com/GeneralKugelBlitz/solarpdfchatbot/main/<image-path>" alt="<alt-text>" width="600"/>.\n\nExample: ![](Aspose.Words.a6dfd08d-0e42-4d9a-a393-729bb7fea2b2.001.png)\ninto this html:<img src="https://raw.githubusercontent.com/GeneralKugelBlitz/solarpdfchatbot/main/Aspose.Words.a6dfd08d-0e42-4d9a-a393-729bb7fea2b2.001.png" alt="" width="600"/>
 
     {chat_history}
     Human: {human_input}
@@ -101,7 +102,27 @@ else:
 #chain({"input_documents": retrieved_docs, "human_input": "can you tell me how to use instruction panel, hopefullu with some images"}, return_only_outputs=True)
 
 
+import re
 
+def modify_markdown_links(input_string, username, repository):
+    # Regular expression pattern to match Markdown image links
+    pattern = r'!\[(.*?)\]\((.*?)\)'
+
+    # Function to replace Markdown link with the desired format
+    def replace_link(match):
+        alt_text = match.group(1)
+        image_path = match.group(2)
+        raw_url = f'https://raw.githubusercontent.com/{username}/{repository}/main/{image_path}'
+        return f'![{alt_text}]({raw_url})'
+
+    # Use re.sub to find and replace all Markdown links in the input string
+    modified_string = re.sub(pattern, replace_link, input_string)
+
+    return modified_string
+
+
+username="GeneralKugelBlitz"
+repository="solarpdfchatbot"
 
 st.title("TSVG Series High-voltage Static Var Generator User Manual Chatbot")
 
@@ -112,7 +133,7 @@ if "messages" not in st.session_state:
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+        st.markdown(message["content"], unsafe_allow_html=True)
 
 # React to user input
 if prompt := st.chat_input("Ask about TSVG var generator"):
@@ -125,9 +146,12 @@ if prompt := st.chat_input("Ask about TSVG var generator"):
     response=solarpdfllm(get_retrievals(prompt), new_conversation.write_as_string(), prompt)
     new_conversation.add_to_conversation(f"assistant:{response}")
     st.session_state.conversation = new_conversation
+
+    modify_markdown_links(response, username, repository)
+
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
-        st.markdown(response)
+        st.markdown(response, unsafe_allow_html=True)
     
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response})
