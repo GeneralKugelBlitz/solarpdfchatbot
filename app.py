@@ -43,7 +43,7 @@ Overall, it provides comprehensive instructions and information for users to pro
     2. Answer questions in a helpful manner that straight to the point, with clear structure & all relevant information that might help users answer the question
     3. Anwser should be formatted in Markdown with images in html format
     4. If there are relevant tables or markdown images they are very important reference data, please include them as part of the answer
-    5. Convert markdown links to html like this:\nmarkdown:!(<alt-text>)[<image-path>]\nhtml:<img src="https://raw.githubusercontent.com/GeneralKugelBlitz/solarpdfchatbot/main/<image-path>" alt="<alt-text>" width="600"/>.\n\nExample: ![](Aspose.Words.a6dfd08d-0e42-4d9a-a393-729bb7fea2b2.001.png)\ninto this html:<img src="https://raw.githubusercontent.com/GeneralKugelBlitz/solarpdfchatbot/main/Aspose.Words.a6dfd08d-0e42-4d9a-a393-729bb7fea2b2.001.png" alt="" width="600"/>
+    5. Convert markdown links to html like this:\nmarkdown:!(<alt-text>)[<image-path>]\nhtml:<img src="https://raw.githubusercontent.com/GeneralKugelBlitz/solarpdfchatbot/main/<image-path>" alt="<alt-text>" width="600"/>.\n\nExample: ![](Aspose.Words.a6dfd08d-0e42-4d9a-a393-729bb7fea2b2.001.png)\ninto this html:<img src="https://raw.githubusercontent.com/GeneralKugelBlitz/solarpdfchatbot/main/Aspose.Words.a6dfd08d-0e42-4d9a-a393-729bb7fea2b2.001.png" alt="" width="600"/> (Always keep width 600)
 
     {chat_history}
     Human: {human_input}
